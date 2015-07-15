@@ -87,6 +87,24 @@ QUERY_FOR_TEXT = """
     <%s> nie:plainTextContent ?text .
     }
 """
+QUERY_FOR_VOLUME = """
+SELECT nie:title(?feed) count(?message)
+WHERE {
+  ?message a mfo:FeedMessage;
+           nmo:communicationChannel ?feed
+} GROUP BY ?feed
+"""
+
+
+QUERY_FOR_USER_LIST"""
+SELECT nie:title(?message) nie:url(?message)
+WHERE {
+  ?message a mfo:FeedMessage;
+           nmo:isRead false .
+}
+ORDER BY DESC(nie:contentCreated(?message))
+LIMIT <%s>``
+"""
 
 
 class TrackerRSS(GObject.GObject):

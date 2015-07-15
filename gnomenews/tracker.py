@@ -38,7 +38,7 @@ QUERY_FIRST_ENTRIES = """
       ?entry a mfo:FeedMessage ;
          nie:title ?title ;
          nie:contentLastModified ?date ;
-         nmo:from ?author ;
+         nco:creator ?author ;
          nie:plainTextContent ?text .
     OPTIONAL {
        ?entry nmo:isRead ?isRead.
@@ -64,7 +64,7 @@ QUERY_FOR_URI = """
     SELECT ?title ?author WHERE {
       <%s> a mfo:FeedMessage ;
              nie:title ?title ;
-             nmo:from ?author .
+             nco:creator ?author .
       OPTIONAL {
       <%s> nmo:isRead ?isRead.
       }
@@ -76,7 +76,7 @@ INSERT_QUERY = """
         <%s> a mfo:FeedMessage ;
          nie:contentLastModified "%s" ;
          nmo:communicationChannel <%s>;
-         nmo:from "%s" ;
+         nco:creator "%s" ;
          nie:plainTextContent "%s" ;
          nie:title "%s".
     }
@@ -87,6 +87,7 @@ QUERY_FOR_TEXT = """
     <%s> nie:plainTextContent ?text .
     }
 """
+
 QUERY_FOR_VOLUME = """
 SELECT nie:title(?feed) count(?message)
 WHERE {
@@ -96,16 +97,15 @@ WHERE {
 """
 
 
-QUERY_FOR_USER_LIST"""
+QUERY_FOR_USER_LIST="""
 SELECT nie:title(?message) nie:url(?message)
 WHERE {
   ?message a mfo:FeedMessage;
            nmo:isRead false .
 }
 ORDER BY DESC(nie:contentCreated(?message))
-LIMIT <%s>``
+LIMIT <%s>
 """
-
 
 class TrackerRSS(GObject.GObject):
     @log
